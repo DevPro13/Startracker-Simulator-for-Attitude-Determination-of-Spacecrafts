@@ -1,1 +1,1 @@
-# Startracker-Simulator-for-Attitute-Determination-of-Spacecrafts
+# Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts
