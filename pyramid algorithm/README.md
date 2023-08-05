@@ -5,7 +5,7 @@ n = number of stars in the frame
 - if n=3, the pyramid can't be built, check for a unique solution of the triangle
   if the condition <br>
   <p align="center">
-  $sign[b^T(b_j \times b_k)] = sign[r^T(r_j \times r_k)]$
+  $sign[b_i^T(b_j \times b_k)] = sign[r_i^T(r_j \times r_k)]$
   </p>    
   <br> is satisfied, the catalog triangles are not specular <br>
   NOTE: If more than one nonspecular cataloged triangle is found to match the measured triangle within the measurement tolerance, the star identification is not     accepted as unique (Display error code in this case too)
