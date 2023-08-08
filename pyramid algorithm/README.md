@@ -18,12 +18,16 @@ n = number of stars in the frame
   </p>
 ## Interstar angle
 It is essential to get the interstar angle in order to match the triad or pyramid structure to the star catalog. Let us calculate the angle part and collect resources for this part.<br>
-From **Star Identification and Attitude Determination With Projective Cameras** by JOHN A. CHRISTIAN AND JOHN L. CRASSIDIS<p align="center">
-![image](https://github.com/DevPro13/Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts/assets/72692293/547198df-9eb3-4c68-a620-4b2dd78bacba)
-![image](https://github.com/DevPro13/Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts/assets/72692293/1ffdee3d-8f37-4cfb-823f-25c8e1b8b8f0)
-</p>
 <p align="center">
   
   ![image](https://github.com/DevPro13/Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts/assets/72692293/5c07cfa3-86f1-4392-982b-63d2d11846ed)
 </p>
 This is the vector that interprets the direction of to star by a pair of angles (e.g., right ascension and declination) in the International Celestial Reference Frame (ICRF), where &delta;<sub>i</sub> is declination and &alpha;<sub>i</sub> is right ascension.
+
+From **Star Identification and Attitude Determination With Projective Cameras** by JOHN A. CHRISTIAN AND JOHN L. CRASSIDIS<p align="center">
+![image](https://github.com/DevPro13/Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts/assets/72692293/547198df-9eb3-4c68-a620-4b2dd78bacba)
+![image](https://github.com/DevPro13/Startracker-Simulator-for-Attitude-Determination-of-Spacecrafts/assets/72692293/1ffdee3d-8f37-4cfb-823f-25c8e1b8b8f0)
+<br>How are we gonna calculate the angle with different frames as shown above? how to get a consistent interstar angle with different frame angles with reference frame?
+This seems like a challenge, let's find more about the interstar vector and sensor vector
+</p>
+
