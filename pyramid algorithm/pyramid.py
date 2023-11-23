@@ -17,3 +17,13 @@ else:
                 k=j+dk
                 print(f"[{i} {j} {k}]")
 
+def smart_triad(n):
+    #number of stars in the frame is more than 3
+    if(n>3):
+        #smart sequence of triad indices
+        for dj in range(1, n-1):
+            for dk in range(1, n-dj):
+                for i in range(1, n-dk-dj+1):
+                    j=i+dj
+                    k=j+dk
+                    print(f"[{i} {j} {k}]")
