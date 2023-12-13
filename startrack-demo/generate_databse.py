@@ -10,7 +10,7 @@ import sys
 import starTrack
 
 # Create instance without loading any database.
-t3 = starTrack.Tetra3(load_database=None)
+t3 = starTrack.STARTRACK(load_database=None)
 
 # Generate and save database.
 t3.generate_database(save_as='t3_fov20-30_mag8', max_fov=30, min_fov=20,

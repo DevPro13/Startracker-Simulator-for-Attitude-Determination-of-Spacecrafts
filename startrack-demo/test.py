@@ -5,7 +5,7 @@ from PIL import Image
 from pathlib import Path
 EXAMPLES_DIR = Path(__file__).parent
 
-demo = starTrack.Tetra3()
+demo = starTrack.STARTRACK()
 
 path = EXAMPLES_DIR / 'images'
 

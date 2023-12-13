@@ -244,7 +244,7 @@ def _find_centroid_matches(image_centroids, catalog_centroids, r):
     matches = matches[np.unique(matches[:, 1], return_index=True)[1], :]
     return matches
 
-class Tetra3():
+class STARTRACK():
     """Solve star patterns and manage databases.
 
     To find the direction in the sky an image is showing this class calculates a "fingerprint" of
