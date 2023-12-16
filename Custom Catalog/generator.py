@@ -133,13 +133,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
         # Preallocate star table:
     star_table = np.zeros((num_entries, 6), dtype=np.float32)
     # Preallocate ID table
-    if star_catalog == 'bsc5':
-        star_catID = np.zeros(num_entries, dtype=np.uint16)
-    elif star_catalog == 'hip_main.csv':
-        star_catID = np.zeros(num_entries, dtype=np.uint32)
-    else: #is tyc_main
-        star_catID = np.zeros((num_entries, 3), dtype=np.uint16)
-
+    star_catID = np.zeros(num_entries, dtype=np.uint32)
     # Read magnitude, RA, and Dec from star catalog:
     # The Hipparcos and Tycho catalogs uses International Celestial
     # Reference System (ICRS) which is essentially J2000. See
@@ -196,11 +190,8 @@ def generate_database(max_fov, min_fov=None, save_as=None,
             dec = np.deg2rad(delta + mu_delta * (epoch_proper_motion - pm_origin))
             star_table[i,:] = ([ra, dec, 0, 0, 0, mag])
             # Find ID, depends on the database
-            if star_catalog == 'hip_main.csv':
-                star_catID[i] = np.uint32(entry[1])
-            else: # is tyc_main
-                star_catID[i, :] = [np.uint16(x) for x in entry[1].split()]
-
+            star_catID[i] = np.uint32(entry[1])
+            
         if incomplete_entries:
             print('Skipped %i incomplete entries.' % incomplete_entries)
 
@@ -212,10 +203,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
     star_table = star_table[brightness_ii, :]  # Sort by brightness
     num_entries = star_table.shape[0]
     # Trim and order catalogue ID array to match
-    if star_catalog in ('bsc5', 'hip_main.csv'):
-        star_catID = star_catID[kept][brightness_ii]
-    else:
-        star_catID = star_catID[kept, :][brightness_ii, :]
+    star_catID = star_catID[kept][brightness_ii]
     print('Loaded ' + str(num_entries) + ' stars with magnitude below ' \
         + str(star_max_magnitude) + '.')
 
@@ -229,12 +217,8 @@ def generate_database(max_fov, min_fov=None, save_as=None,
         star_table = star_table[kept, :]
         num_entries = star_table.shape[0]
         # Trim down catalogue ID to match
-        if star_catalog in ('bsc5', 'hip_main.csv'):
-            star_catID = star_catID[kept]
-        else:
-            star_catID = star_catID[kept, :]
-        print('Limited to RA range ' + str(np.rad2deg(range_ra)) + ', keeping ' \
-            + str(num_entries) + ' stars.')
+        star_catID = star_catID[kept]
+        print('Limited to RA range ' + str(np.rad2deg(range_ra)) + ', keeping ' + str(num_entries) + ' stars.')
     if range_dec is not None:
         range_dec = np.deg2rad(range_dec)
         if range_dec[0] < range_dec[1]: # Range does not cross +/-90deg discontinuity
@@ -244,10 +228,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
         star_table = star_table[kept, :]
         num_entries = star_table.shape[0]
         # Trim down catalogue ID to match
-        if star_catalog in ('bsc5', 'hip_main.csv'):
-            star_catID = star_catID[kept]
-        else:
-            star_catID = star_catID[kept, :]
+        star_catID = star_catID[kept]
         print('Limited to DEC range ' + str(np.rad2deg(range_dec)) + ', keeping ' \
             + str(num_entries) + ' stars.')
 
@@ -367,11 +348,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
     pattern_index = (np.cumsum(keep_for_verifying)-1)
     pattern_list = pattern_index[np.array(list(pattern_list))].tolist()
     # Trim catalogue ID to match
-    if star_catalog in ('bsc5', 'hip_main.csv'):
-        star_catID = star_catID[keep_for_verifying]
-    else:
-        star_catID = star_catID[keep_for_verifying, :]
-
+    star_catID = star_catID[keep_for_verifying]
     # Create all pattens by calculating and sorting edge ratios and inserting into hash table
     print('Start building catalogue.')
     catalog_length = 2 * len(pattern_list)
