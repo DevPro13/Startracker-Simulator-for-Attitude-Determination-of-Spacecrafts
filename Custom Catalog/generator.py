@@ -191,7 +191,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
             star_table[i,:] = ([ra, dec, 0, 0, 0, mag])
             # Find ID, depends on the database
             star_catID[i] = np.uint32(entry[1])
-            
+
         if incomplete_entries:
             print('Skipped %i incomplete entries.' % incomplete_entries)
 
@@ -462,7 +462,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
         
    
 def main():
-    generate_database(max_fov=30, min_fov=10, star_max_magnitude=7, save_as='default_database')
+    generate_database(max_fov=30, min_fov=10, star_max_magnitude=6, save_as='default_database')
 
 if __name__ == "__main__":
     main()
