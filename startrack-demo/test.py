@@ -48,5 +48,12 @@ for impath in path.glob('*'):
         else:
             final = solution
         
-        print('Solution: ' + str(final))
+        print('Solution: ')
+        print('RA: '+ str(final['RA']))
+        print('DEC: '+ str(final['Dec']))
+        print('Roll: '+ str(final['Roll']))
+        print('FOV: '+ str(final['FOV']))
+        print('Matches: '+ str(final['Matches']))
+        # print('Prob: '+ str(final['Prob']))
+
     
