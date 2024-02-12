@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import sys
+from camera import Camera
 
 class Vec3:
     def __init__(self, x, y, z):
@@ -69,10 +70,6 @@ class Catalog:
 
     def __getitem__(self, index):
         return self.data[index]
-
-class Camera:
-    def camera_to_spatial(self, position):
-        pass  # Implement this method if needed
 
 def angle_unit(vec1, vec2):
     dot = vec1.dot_product(vec2)
