@@ -106,10 +106,10 @@ def pyramid_star_id_algorithm(database, stars, catalog, camera):
     des = DeserializeContext(database_buffer)
     vector_database = PairDistanceKVectorDatabase(des)
 
-    num_false_stars = 1  # Example value, replace with the actual value
-    tolerance = 1e-3  # Example value, replace with the actual value
-    cutoff = 10000  # Example value, replace with the actual value
-    max_mismatch_probability = 0.1  # Example value, replace with the actual value
+    num_false_stars = 1  
+    tolerance = 1e-3  
+    cutoff = 10000  
+    max_mismatch_probability = 0.1  
 
     expected_mismatches_constant = (num_false_stars ** 4) * (tolerance ** 5) / 2 / (math.pi ** 2)
     num_stars = len(stars)
