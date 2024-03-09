@@ -3,6 +3,9 @@ import starTrack
 from time import perf_counter as precision_timestamp
 from PIL import Image
 from pathlib import Path
+import outputpresentation, quarterneonCalc
+#from outputpresentation import *
+#from quarterneonCalc import *
 EXAMPLES_DIR = Path(__file__).parent
 
 demo = starTrack.STARTRACK()
@@ -53,7 +56,11 @@ for impath in path.glob('*'):
         print('DEC: '+ str(final['Dec']))
         print('Roll: '+ str(final['Roll']))
         print('FOV: '+ str(final['FOV']))
-        print('Matches: '+ str(final['Matches']))
+
+        q = quarterneonCalc.radec_to_quarterneon(final['RA'], final['Dec'], final['Roll'])
+        outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
+        break
+        #print('Matches: '+ str(final['Matches']))
         # print('Prob: '+ str(final['Prob']))
 
     
