@@ -2,10 +2,13 @@ import starTrack
 
 from time import perf_counter as precision_timestamp
 from PIL import Image
+from PIL import ImageGrab
 from pathlib import Path
 import outputpresentation, quarterneonCalc
-#from outputpresentation import *
-#from quarterneonCalc import *
+import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+
 EXAMPLES_DIR = Path(__file__).parent
 
 demo = starTrack.STARTRACK()
@@ -17,6 +20,13 @@ a_distortion=[-.2, .1]
 
 optional_features = {'min_sum': 250, 'max_axis_ratio': 1.5}
 
+def centroiding_img(pointz):
+        image = cv2.imread("test69.png")
+        plt.imshow(image)
+        plt.scatter(pointz[:, 1], pointz[:, 0], c="red", marker="o", s=5, alpha=0.3)
+        plt.show()
+        plt.savefig("test.png")
+    
 for impath in path.glob('*'):
     print('Solving for image at: ' + str(impath))
     with Image.open(str(impath)) as img:
@@ -50,17 +60,16 @@ for impath in path.glob('*'):
             final = (solution,) + centr_data[1:]
         else:
             final = solution
-        
+
+        print(solution)
         print('Solution: ')
         print('RA: '+ str(final['RA']))
         print('DEC: '+ str(final['Dec']))
         print('Roll: '+ str(final['Roll']))
         print('FOV: '+ str(final['FOV']))
 
+        centroiding_img(centr_data)
         q = quarterneonCalc.radec_to_quarterneon(final['RA'], final['Dec'], final['Roll'])
-        outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
+        #outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
         break
-        #print('Matches: '+ str(final['Matches']))
-        # print('Prob: '+ str(final['Prob']))
-
     
