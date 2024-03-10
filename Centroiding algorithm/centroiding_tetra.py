@@ -4,7 +4,7 @@ import os
 import scipy.optimize
 
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageEnhance
 
 def get_centroids_from_image(image, sigma=2, image_th=None, crop=None, downsample=None,
                              filtsize=25, bg_sub_mode='local_mean', sigma_mode='global_root_square',
@@ -480,13 +480,44 @@ else:
             centroids = centr_data
 print('Found ' + str(len(centroids)) + ' centroids.')
 
+labelled_regions = centr_data[1]['labelled_regions']  # Extract labelled regions
 
-# Looping through elements
-for element in centr_data:
-  # Check if element is a tuple
-  if isinstance(element, tuple):
-    # Access contents of inner tuple (modify as needed)
-    for inner_element in element:
-      print(inner_element)
-  else:
-    print(element)
+# Now you can use the labelled_regions array for further processing or visualization
+print(labelled_regions)
+
+def overlay_spots(original_image, labelled_regions, alpha=0.5):
+  """
+  Overlays the labelled_regions array on the original image, highlighting spots.
+
+  Args:
+      original_image: PIL Image object of the original image.
+      labelled_regions: 2D boolean array indicating potential spots.
+      alpha: Transparency level for the overlay (0.0 to 1.0).
+
+  Returns:
+      A PIL Image object with the overlay.
+  """
+
+  # Convert labelled_regions to a grayscale image (optional)
+  # grayscale_image = labelled_regions * 255
+
+  # Create a mask image from labelled_regions (optional)
+  mask_image = Image.fromarray(labelled_regions * 255).convert('L')  # Convert to grayscale
+
+  # Adjust contrast of mask for better highlighting (optional)
+  mask_enhancer = ImageEnhance.Contrast(mask_image)
+  mask_image = mask_enhancer.enhance(2.0)  # Adjust contrast as desired
+
+  # Create a partially transparent overlay image
+  overlay_image = mask_image.convert('RGBA')
+  overlay_image.putalpha(int(alpha * 255))
+
+  # Overlay the mask image on the original image with transparency
+  original_image = original_image.convert('RGBA')
+  return Image.alpha_composite(original_image, overlay_image)
+
+# Assuming you have the original image (original_image) and labelled_regions array
+overlayed_image = overlay_spots(image, labelled_regions)
+
+# Display the overlaid image
+overlayed_image.show()
