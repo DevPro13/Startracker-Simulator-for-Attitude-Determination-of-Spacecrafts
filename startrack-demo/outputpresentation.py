@@ -39,7 +39,7 @@ def presentoutput(ra,dec,roll,q):
     #to display the image after centroiding
     canvas = Canvas(m, width = 720, height = 480)
     canvas.pack()
-    img = PhotoImage(file="test69.png") #file path
+    img = PhotoImage(file="test.png") #file path
     canvas.create_image(20,20, anchor=NW, image=img)
 
     gap_label = Label(m, text="")  # Empty label for space

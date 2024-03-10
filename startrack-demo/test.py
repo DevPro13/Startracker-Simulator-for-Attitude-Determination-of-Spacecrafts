@@ -21,11 +21,16 @@ a_distortion=[-.2, .1]
 optional_features = {'min_sum': 250, 'max_axis_ratio': 1.5}
 
 def centroiding_img(pointz):
-        image = cv2.imread("test69.png")
-        plt.imshow(image)
-        plt.scatter(pointz[:, 1], pointz[:, 0], c="red", marker="o", s=5, alpha=0.3)
-        plt.show()
-        plt.savefig("test.png")
+    image = cv2.imread("test69.png")
+    fig, ax = plt.subplots(facecolor='whitesmoke')
+    plt.imshow(image)
+    plt.scatter(pointz[:, 1], pointz[:, 0], c="green", marker="o", s=5, alpha=0.3)
+    plt.axis('off')
+    plt.subplots_adjust(left=0.0, right=1.0, top=1.0, bottom=0.0)
+    plt.tight_layout()
+    plt.savefig("test.png")
+    plt.show()
+    plt.close()
     
 for impath in path.glob('*'):
     print('Solving for image at: ' + str(impath))
@@ -69,7 +74,8 @@ for impath in path.glob('*'):
         print('FOV: '+ str(final['FOV']))
 
         centroiding_img(centr_data)
-        q = quarterneonCalc.radec_to_quarterneon(final['RA'], final['Dec'], final['Roll'])
-        #outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
+        q = quarterneonCalc.radec_to_quaternion(final['RA'], final['Dec'], final['Roll'])
+        print(q)
+        outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
         break
     

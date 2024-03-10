@@ -1,6 +1,6 @@
 import math
 
-def radec_to_quarterneon(ra,dec,roll):
+def radec_to_quaternion(ra,dec,roll):
     #initializing the quarterneon
     q=[0,0,0,0]
 
