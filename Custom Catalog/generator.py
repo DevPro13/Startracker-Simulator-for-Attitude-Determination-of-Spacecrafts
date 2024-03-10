@@ -130,7 +130,7 @@ def generate_database(max_fov, min_fov=None, save_as=None,
         print('Using catalog RA/Dec %s epoch; propagating proper motions from %s to %s.' %
                             (epoch_equinox, pm_origin, epoch_proper_motion))
 
-        # Preallocate star table:
+    # Preallocate star table:
     star_table = np.zeros((num_entries, 6), dtype=np.float32)
     # Preallocate ID table
     star_catID = np.zeros(num_entries, dtype=np.uint32)
@@ -433,12 +433,12 @@ def generate_database(max_fov, min_fov=None, save_as=None,
 
     Args:
         path (str or pathlib.Path): The file to save to. If given a str, the file will be saved
-            in the tetra3/data directory. If given a pathlib.Path, this path will be used
+            in the /data directory. If given a pathlib.Path, this path will be used
             unmodified. The suffix .npz will be added.
     """
         path = ""
         if isinstance(path, str):
-            print('String given, append to tetra3 directory')
+            print('String given, append to the current directory')
             path = (Path(__file__).parent / 'data' / path).with_suffix('.npz')
         else:
             print('Not a string, use as path directly')
