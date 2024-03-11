@@ -267,15 +267,16 @@ def get_centroids_from_image(image, sigma=2, image_th=None, crop=None, downsampl
     extracted = tmp[valid, :]
     rejected = tmp[~valid, :]
     if return_images:
+
         # Convert 16-bit to 8-bit:
         if raw_image.mode == 'I;16':
             tmp = np.array(raw_image, dtype=np.uint16)
             tmp //= 256
             tmp = tmp.astype(np.uint8)
             raw_image = Image.fromarray(tmp)
-        # Convert mono to RGB
-        if raw_image.mode != 'RGB':
-            raw_image = raw_image.convert('RGB')
+        # Convert mono to RGBA
+        if raw_image.mode != 'RGBA':
+            raw_image = raw_image.convert('RGBA')
         # Draw green circles for kept centroids, red for rejected
         img_draw = ImageDraw.Draw(raw_image)
         def draw_circle(centre, radius, **kwargs):
@@ -472,9 +473,8 @@ def crop_and_downsample_image(image, crop=None, downsample=None, sum_when_downsa
 current_dir = os.getcwd()
 image_path = os.path.join(current_dir, './plot.png')  # Join current directory with path
 image = Image.open(image_path)
-# image = image.convert("RGB")  # Discards the 4th channel
-centr_data = get_centroids_from_image(image)
-# print(centr_data)
+centr_data = get_centroids_from_image(image, min_area=7)
+print(centr_data)
 if isinstance(centr_data, tuple):
             centroids = centr_data[0]
 else:
@@ -482,12 +482,11 @@ else:
 print('Found ' + str(len(centroids)) + ' centroids.')
 print(centroids)
 
+
+
 labelled_regions = centr_data[1]['labelled_regions']  # Extract labelled regions
 
-# Now you can use the labelled_regions array for further processing or visualization
-print(labelled_regions)
-
-def overlay_spots(original_image, labelled_regions, alpha=0.5):
+def overlay_spots(original_image, labelled_regions, alpha=0.8):
   """
   Overlays the labelled_regions array on the original image, highlighting spots.
 
@@ -508,7 +507,7 @@ def overlay_spots(original_image, labelled_regions, alpha=0.5):
 
   # Adjust contrast of mask for better highlighting (optional)
   mask_enhancer = ImageEnhance.Contrast(mask_image)
-  mask_image = mask_enhancer.enhance(2.0)  # Adjust contrast as desired
+  mask_image = mask_enhancer.enhance(3.0)  # Adjust contrast as desired
 
   # Create a partially transparent overlay image
   overlay_image = mask_image.convert('RGBA')
@@ -519,7 +518,7 @@ def overlay_spots(original_image, labelled_regions, alpha=0.5):
   return Image.alpha_composite(original_image, overlay_image)
 
 # Assuming you have the original image (original_image) and labelled_regions array
-overlayed_image = overlay_spots(image, labelled_regions)
+overlayed_image = overlay_spots(image, labelled_regions, alpha = 1)
 
 save_path = "spots.png"
 overlayed_image.save(save_path)
@@ -527,42 +526,11 @@ overlayed_image.save(save_path)
 overlayed_image.show()
 
 
-# print(centr_data[1])
+# display the final image with the green/red circles given by final_centroids image
 
 
 final_centroids = centr_data[1]['final_centroids']  # Extract final_centroids
 
-
-# Check if `final_centroids` is a PIL image
-if not isinstance(final_centroids, PIL.Image.Image):
-    raise ValueError("`final_centroids` is expected to be a PIL Image.")
-
-# Get image dimensions
-width, height = overlayed_image.size
-
-try:
-  mask_image = final_centroids.copy() 
-  if mask_image.mode != 'RGBA':
-    print("RGBA")
-    mask_image = mask_image.convert('RGBA')
-except (AttributeError, TypeError):  # Handle potential errors during copy
-  print("Error creating mask image. Check `final_centroids` format.")
-  raise  # Re-raise the original error for clarity
-
-
-# Apply transparency to non-circle areas (modify threshold if needed)
-threshold = 9 # Adjust this value (0-255) to control transparency outside circles
-mask_image = mask_image.point(lambda p: p if p > threshold else 0)
-
-# Ensure compatible modes (both likely RGBA)
-if overlayed_image.mode != mask_image.mode:
-    mask_image = mask_image.convert(overlayed_image.mode)
-
-# Overlay the images using alpha compositing (circles appear around centroids)
-final_image = Image.alpha_composite(overlayed_image, mask_image)
-
-# Display the overlaid image (optional) 
+final_image = overlay_spots(final_centroids, labelled_regions, alpha =2/3)
 final_image.show()
-
-# Save the result in PNG format (recommended for transparency)
 final_image.save("result.png")
