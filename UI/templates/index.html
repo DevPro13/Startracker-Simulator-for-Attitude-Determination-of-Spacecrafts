@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Star Tracker</title>
+        <link rel="stylesheet" href='/static/style.css'/>
+    </head>
+    <body>
+        <h1 align="center">Image Simulator for Star-Tracker</h1>
+        <div id="maindiv">
+            <div id="formbox">
+                <form action="/" method="POST">
+                    <div id="block1">
+                     <div id="block1A"><h3>Star-Tracker Orientation Angles</h3></div>
+                     <div id="block1B">
+                    <label for="RA">RA</label>
+                    <input type="number" step="any" name="RA">
+                    <label for="DEC">DEC</label>
+                    <input type="number" step="any" name="DEC">
+                    <label for="ROLL">ROLL</label>
+                    <input type="number" step="any" name="ROLL">
+                     </div>
+                </div>
+                <div id="block2">
+                    <div id="block2A"><h3>Field of View of Camera</h3></div>
+                    <div id="block2B">
+                    <label for="FOVX">FOVX</label>
+                    <input type="number" step="any" name="FOVx">
+                    <label for="FOVY">FOVY</label>
+                    <input type="number" step="any" name="FOVy">
+                    </div>
+                </div>
+                <div id="block3">
+                    <div id="block3A"><h3>Resolution of Camera</h3></div>
+                    <div id="block3B">
+                    <label for="RES_X">RESOLUTION_X</label>
+                    <input type="number" step="any" name="RES_X">
+                    <label for="RES_Y">RESOLUTION_Y</label>
+                    <input type="number" step="any" name="RES_Y">
+                    </div>
+                </div>
+                <div id="block4">
+                    <div id="block4A"><h3>Magnitude Threshold,Gaussian Level and Noise Levl</h3></div>
+                    <div id="block4B">
+                    <label for="mag">Magnitude</label>
+                    <input type="number" step="any" name="mag">
+                    <label for="sigma">SIGMA</label>
+                    <input type="number" step="any" name="sigma">
+                    <label for="noise">NOISE LEVEL</label>
+                    <input type="number" step="any" name="noise">
+                    </div>
+                </div>
+                <div id="block5">
+                    <input type="submit" value="GENERATE IMAGE">
+                </div>
+                </form>
+            </div>
+            <div id="imagebox">
+               <h1> Here comes image</h1>
+               <canvas id="myCanvas">
+                
+               </canvas>
+            </div>
+        </div>
+    {% if (text) %}
+    <h2>The form response is:</h2>
+        {{text}}
+    {% endif %} 
+</body>
+</html>
+
