@@ -2,6 +2,7 @@ import numpy as np
 import scipy
 import os
 import scipy.optimize
+import PIL
 
 
 from PIL import Image, ImageDraw, ImageEnhance
@@ -526,15 +527,42 @@ overlayed_image.save(save_path)
 overlayed_image.show()
 
 
+# print(centr_data[1])
+
+
 final_centroids = centr_data[1]['final_centroids']  # Extract final_centroids
 
 
+# Check if `final_centroids` is a PIL image
+if not isinstance(final_centroids, PIL.Image.Image):
+    raise ValueError("`final_centroids` is expected to be a PIL Image.")
 
-# Overlay the image (assuming image has alpha channel for transparency)
-final_image = Image.alpha_composite(overlayed_image, final_centroids)
+# Get image dimensions
+width, height = overlayed_image.size
 
-# Display the overlaid image (optional)
+try:
+  mask_image = final_centroids.copy() 
+  if mask_image.mode != 'RGBA':
+    print("RGBA")
+    mask_image = mask_image.convert('RGBA')
+except (AttributeError, TypeError):  # Handle potential errors during copy
+  print("Error creating mask image. Check `final_centroids` format.")
+  raise  # Re-raise the original error for clarity
+
+
+# Apply transparency to non-circle areas (modify threshold if needed)
+threshold = 9 # Adjust this value (0-255) to control transparency outside circles
+mask_image = mask_image.point(lambda p: p if p > threshold else 0)
+
+# Ensure compatible modes (both likely RGBA)
+if overlayed_image.mode != mask_image.mode:
+    mask_image = mask_image.convert(overlayed_image.mode)
+
+# Overlay the images using alpha compositing (circles appear around centroids)
+final_image = Image.alpha_composite(overlayed_image, mask_image)
+
+# Display the overlaid image (optional) 
 final_image.show()
 
-# Save the result
-final_image.save("result.png")  # Replace with your desired filename
+# Save the result in PNG format (recommended for transparency)
+final_image.save("result.png")
