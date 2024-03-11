@@ -20,8 +20,38 @@ a_distortion=[-.2, .1]
 
 optional_features = {'min_sum': 250, 'max_axis_ratio': 1.5}
 
-def centroiding_img(pointz):
-    image = cv2.imread("test69.png")
+def centroiding_img(img, pointz):
+    image = cv2.imread(str(img))
+    # The kernel to be used for dilation purpose 
+    kernel = np.ones((5, 5), np.uint8) 
+    
+    # converting the image to HSV format 
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV) 
+    
+    # defining the lower and upper values of HSV, 
+    # this will detect yellow colour 
+    Lower_hsv = np.array([20, 70, 100]) 
+    Upper_hsv = np.array([30, 255, 255]) 
+    
+    # creating the mask by eroding,morphing, 
+    # dilating process 
+    Mask = cv2.inRange(hsv, Lower_hsv, Upper_hsv) 
+    Mask = cv2.erode(Mask, kernel, iterations=1) 
+    Mask = cv2.morphologyEx(Mask, cv2.MORPH_OPEN, kernel) 
+    Mask = cv2.dilate(Mask, kernel, iterations=1) 
+    
+    # Inverting the mask by 
+    # performing bitwise-not operation 
+    Mask = cv2.bitwise_not(Mask) 
+    
+    # Displaying the image 
+    plt.imshow(Mask)
+    plt.axis('off')
+    plt.subplots_adjust(left=0.0, right=1.0, top=1.0, bottom=0.0)
+    plt.tight_layout()
+    plt.savefig("testinv.png")
+    plt.close()
+
     fig, ax = plt.subplots(facecolor='whitesmoke')
     plt.imshow(image)
     plt.scatter(pointz[:, 1], pointz[:, 0], c="green", marker="o", s=5, alpha=0.3)
@@ -31,14 +61,14 @@ def centroiding_img(pointz):
     plt.savefig("test.png")
     plt.show()
     plt.close()
-    
+
 for impath in path.glob('*'):
     print('Solving for image at: ' + str(impath))
     with Image.open(str(impath)) as img:
         assert demo.has_database, 'No database loaded'
-        demo._logger.debug('Got solve from image with input: ' + str((img, {**optional_features})))
+        print('Got solve from image with input: ' + str((img, {**optional_features})))
         (width, height) = img.size[:2]
-        demo._logger.debug('Image (height, width): ' + str((height, width)))
+        print('Image (height, width): ' + str((height, width)))
         
         # Run star extraction, passing optional_features along
         t0_extract = precision_timestamp()
@@ -50,7 +80,7 @@ for impath in path.glob('*'):
             centroids = centr_data[0]
         else:
             centroids = centr_data
-        demo._logger.debug('Found this many centroids, in time: ' + str((len(centroids), t_extract)))
+        print('Found this many centroids, in time: ' + str((len(centroids), t_extract)))
         
         # Run centroid solver, passing arguments along (could clean up with optional_features handler)
         solution = demo.solve_from_centroids(centroids, (height, width), 
@@ -65,7 +95,7 @@ for impath in path.glob('*'):
             final = (solution,) + centr_data[1:]
         else:
             final = solution
-
+        print(centr_data)
         print(solution)
         print('Solution: ')
         print('RA: '+ str(final['RA']))
@@ -73,7 +103,7 @@ for impath in path.glob('*'):
         print('Roll: '+ str(final['Roll']))
         print('FOV: '+ str(final['FOV']))
 
-        centroiding_img(centr_data)
+        centroiding_img(impath, centr_data)
         q = quarterneonCalc.radec_to_quaternion(final['RA'], final['Dec'], final['Roll'])
         print(q)
         outputpresentation.presentoutput(final['RA'], final['Dec'], final['Roll'],q)
