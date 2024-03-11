@@ -474,7 +474,6 @@ current_dir = os.getcwd()
 image_path = os.path.join(current_dir, './plot.png')  # Join current directory with path
 image = Image.open(image_path)
 centr_data = get_centroids_from_image(image, min_area=7)
-print(centr_data)
 if isinstance(centr_data, tuple):
             centroids = centr_data[0]
 else:
