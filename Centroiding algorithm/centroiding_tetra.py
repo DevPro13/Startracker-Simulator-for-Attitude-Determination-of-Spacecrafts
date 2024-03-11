@@ -520,29 +520,21 @@ def overlay_spots(original_image, labelled_regions, alpha=0.5):
 # Assuming you have the original image (original_image) and labelled_regions array
 overlayed_image = overlay_spots(image, labelled_regions)
 
-save_path = "spots.jpg"
+save_path = "spots.png"
 overlayed_image.save(save_path)
 # Display the overlaid image
 overlayed_image.show()
 
 
-# final_centroids = centr_data[1]['final_centroids']  # Extract final_centroids
-# # print('----')
-# # print(final_centroids)
+final_centroids = centr_data[1]['final_centroids']  # Extract final_centroids
 
-# from PIL import Image
-# import matplotlib.pyplot as plt
 
-# # Assuming the image object is stored in the variable 'image'
-# plt.imshow(final_centroids)
-# # plt.axis('off')  # Hide axes (optional)
-# plt.show()
 
-# # Overlay the image (assuming image has alpha channel for transparency)
-# final_image = Image.alpha_composite(overlayed_image, final_centroids)
+# Overlay the image (assuming image has alpha channel for transparency)
+final_image = Image.alpha_composite(overlayed_image, final_centroids)
 
-# # Display the overlaid image (optional)
-# final_image.show()
+# Display the overlaid image (optional)
+final_image.show()
 
-# # Save the result
-# final_image.save("result.jpg")  # Replace with your desired filename
+# Save the result
+final_image.save("result.png")  # Replace with your desired filename
