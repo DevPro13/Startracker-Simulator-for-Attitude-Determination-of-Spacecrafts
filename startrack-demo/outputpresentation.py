@@ -1,4 +1,7 @@
 from tkinter import *
+from PIL import Image, ImageTk
+import os
+import scaleimage
 
 #dummy values
 ra = 12.34  # Right Ascension
@@ -6,16 +9,24 @@ dec = 20.56  # Declination
 roll = 5.78  # Roll angle
 q = [0.9966, 0.0044, 0, 0]
 
-def presentoutput(ra,dec,roll,q):
+def presentoutput(impath, ra, dec, roll, q):
     ra = round(ra, 3)
     dec = round(dec, 3)
     roll = round(roll, 3)
-    
     rounded_array = []
     for number in q:
         rounded_array.append(round(number, 3))
-    
     q = rounded_array
+    # Split the path into components (directory, filename, extension)
+    head, tail = os.path.split(impath)
+    filename, extension = os.path.splitext(tail)
+
+    # Move one directory behind (assuming the image folder exists one level above)
+    new_head = os.path.dirname(head)
+
+    # Create the new path with modified filename
+    ann_impath = os.path.join(new_head, f"ann_{filename}{extension}")
+    pot_impath = os.path.join(new_head, f"pot_{filename}{extension}")
 
     #main window
     m = Tk()
@@ -35,12 +46,48 @@ def presentoutput(ra,dec,roll,q):
 
     intro_label = Label(m, text="Attitude Calulation",width=66, font=Font)
     intro_label.pack()
+    subIntro_label = Label(m, text=filename,width=66, font=Font)
+    subIntro_label.pack()
 
-    #to display the image after centroiding
-    canvas = Canvas(m, width = 720, height = 480)
-    canvas.pack()
-    img = PhotoImage(file="test.png") #file path
-    canvas.create_image(20,20, anchor=NW, image=img)
+    # Load images using PIL
+    image1 = Image.open(pot_impath)
+    image2 = Image.open(ann_impath)
+
+    #resizing so that it fits into the canvas
+    width1, height1 = image1.size
+    width2, height2 = image2.size
+
+    # Calculate new width while maintaining aspect ratio
+    new_width = min(400, width1, width2)
+    new_height1 = int(height1 * (new_width / width1))
+    new_height2 = int(height2 * (new_width / width2))
+
+    new_image1 = image1.resize((new_width, new_height1))
+    new_image2 = image2.resize((new_width, new_height2))
+    
+    # Convert images to PhotoImage format for tkinter display
+    image1_tk = ImageTk.PhotoImage(new_image1)
+    image2_tk = ImageTk.PhotoImage(new_image2)
+
+    img_frame = LabelFrame(m)
+    img_frame.pack(side='top')
+    # Create labels for images
+    label1 = Label(img_frame, image=image1_tk)
+    label2 = Label(img_frame, image=image2_tk)
+
+    # Pack the labels side-by-side (adjust padding as needed)
+    label1.pack(side=LEFT, padx=10)
+    label2.pack(side=LEFT, padx=10)
+
+    cap_frame = LabelFrame(m)
+    cap_frame.pack(side='top')
+    caption_label1 = Label(cap_frame, text="Image with potential centroid points", width=60, wraplength=400)  # Adjust width and wraplength
+    caption_label1.pack(side=LEFT,padx=10)
+    caption_label2 = Label(cap_frame, text="Annotated image centroid points (red = rejected, green = accepted)", width=60, wraplength=400)  # Adjust width and wraplength
+    caption_label2.pack(side=LEFT,padx=10)
+    # Prevent image garbage collection
+    label1.image = image1_tk  
+    label2.image = image2_tk
 
     gap_label = Label(m, text="")  # Empty label for space
     gap_label.pack(pady=10)
