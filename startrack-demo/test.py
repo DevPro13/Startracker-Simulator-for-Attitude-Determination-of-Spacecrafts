@@ -74,5 +74,6 @@ for impath in path.glob('*'):
         print('FOV: '+ str(final['FOV']))
 
         q = quarterneonCalc.radec_to_quaternion(final['RA'], final['Dec'], final['Roll'])
-        outputpresentation.presentoutput(impath, final['RA'], final['Dec'], final['Roll'],q)
+        print(q)
+        #outputpresentation.presentoutput(impath, final['RA'], final['Dec'], final['Roll'],q)
     
