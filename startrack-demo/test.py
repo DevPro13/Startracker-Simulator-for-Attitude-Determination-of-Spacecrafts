@@ -75,5 +75,5 @@ for impath in path.glob('*'):
 
         q = quarterneonCalc.radec_to_quaternion(final['RA'], final['Dec'], final['Roll'])
         print(q)
-        #outputpresentation.presentoutput(impath, final['RA'], final['Dec'], final['Roll'],q)
+        outputpresentation.presentoutput(impath, final['RA'], final['Dec'], final['Roll'],q)
     
