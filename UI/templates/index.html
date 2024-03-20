@@ -55,16 +55,21 @@
                 </form>
             </div>
             <div id="imagebox">
-               <h1> Here comes image</h1>
-               <canvas id="myCanvas">
-                
-               </canvas>
+               <img id="imgContainer" src="" alt="Star Image">
             </div>
         </div>
-    {% if (text) %}
-    <h2>The form response is:</h2>
-        {{text}}
-    {% endif %} 
+        <div id="descriptionBox">
+                {{description|safe}}
+    </div>
 </body>
+<script>
+     // Get canvas element and its context
+     var imgContainer = document.getElementById('imgContainer');
+     fetch('/get_image?path={{path}}')
+        .then(response => response.blob())
+        .then(blob => {
+            imgContainer.src = URL.createObjectURL(blob);
+            });
+</script>
 </html>
 
