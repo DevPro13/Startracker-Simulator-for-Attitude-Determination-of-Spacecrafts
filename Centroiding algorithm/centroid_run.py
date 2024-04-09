@@ -34,7 +34,7 @@ for filename in os.listdir(input_folder):
             potential_centroids_image.save(output_path)
 
             # Create and save the second output image (annotated image)
-            annotated_image = overlay_spots(final_centroids, labelled_regions, alpha=2/3)
+            annotated_image = overlay_spots(final_centroids, labelled_regions, alpha = 0.6)
             output_path = os.path.join(annotated_images_folder, "ann_" + filename)
             annotated_image.save(output_path)
 

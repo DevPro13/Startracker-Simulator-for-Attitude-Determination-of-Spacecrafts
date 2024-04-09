@@ -292,7 +292,7 @@ def get_centroids_from_image(image, sigma=2, image_th=None, crop=None, downsampl
                 pos *= downsample
                 pos += [offs_h, offs_w]
                 size *= downsample
-            draw_circle(pos, size, outline='green')
+            draw_circle(pos, size, width=5, outline='green')
         for entry in rejected:
             pos = entry[1:3].copy()
             size = .01*width
@@ -300,7 +300,7 @@ def get_centroids_from_image(image, sigma=2, image_th=None, crop=None, downsampl
                 pos *= downsample
                 pos += [offs_h, offs_w]
                 size *= downsample
-            draw_circle(pos, size, outline='red')
+            draw_circle(pos, size,width=5, outline='red')
         images_dict['final_centroids'] = raw_image
 
     # 8. Sort
@@ -485,7 +485,7 @@ print(centroids)
 
 labelled_regions = centr_data[1]['labelled_regions']  # Extract labelled regions
 
-def overlay_spots(original_image, labelled_regions, alpha=0.8):
+def overlay_spots(original_image, labelled_regions, alpha=0.6):
   """
   Overlays the labelled_regions array on the original image, highlighting spots.
 
@@ -527,9 +527,8 @@ overlayed_image.show()
 
 # display the final image with the green/red circles given by final_centroids image
 
-
 final_centroids = centr_data[1]['final_centroids']  # Extract final_centroids
 
-final_image = overlay_spots(final_centroids, labelled_regions, alpha =2/3)
+final_image = overlay_spots(final_centroids, labelled_regions, alpha = 2/3)
 final_image.show()
 final_image.save("result.png")
