@@ -49,8 +49,13 @@ class GenerateStarImage:
         PSF_normalized = (PSF - PSF.min()) / (PSF.max() - PSF.min()) * 255
         # Convert PSF array to uint8 for OpenCV
         PSF_uint8 = PSF_normalized.astype(np.uint8)
+        # define the alpha and beta
+        alpha =15 # Contrast control
+        beta = 1 # Brightness control
+        # call convertScaleAbs function
+        PSF_uint8_bright= cv2.convertScaleAbs(PSF_uint8,alpha=alpha, beta=beta)
         #save the image
-        cv2.imwrite(filename,PSF_uint8)
+        cv2.imwrite(filename,PSF_uint8_bright)
     def psfGaussianDistribution(self,x,y,Mv):
         k1=1000
         k2=k3=1
