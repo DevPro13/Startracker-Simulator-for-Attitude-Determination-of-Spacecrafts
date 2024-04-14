@@ -56,19 +56,19 @@ class SimulatorModel:
         rangeOfAlpha=np.array([alpha_0-(R/np.cos(delta_0)),alpha_0+(R/np.cos(delta_0))])
         rangeOfDelta=np.array([delta_0-R,delta_0+R])
         return np.logical_and(rangeOfAlpha[0]<alpha_i<rangeOfAlpha[1],rangeOfDelta[0]<delta_i<rangeOfDelta[1])
-    def getPixelXY(self,sensor_coord_mat):
-        fx=self.res_x/(2*np.tan(self.FOVx/2))
-        fy=self.res_y/(2*np.tan(self.FOVy/2))
-        proj_mat=np.array([
-            [fx,0,self.res_x/2],
-            [0,fy,self.res_y/2],
-            [0,0,1]
-        ])
-        return np.matmul(proj_mat,sensor_coord_mat)+np.array([
-            [self.res_x/2],
-            [self.res_y/2],
-            [0]
-        ])
+    # def getPixelXY(self,sensor_coord_mat):
+    #     fx=self.res_x/(2*np.tan(self.FOVx/2))
+    #     fy=self.res_y/(2*np.tan(self.FOVy/2))
+    #     proj_mat=np.array([
+    #         [fx,0,self.res_x/2],
+    #         [0,fy,self.res_y/2],
+    #         [0,0,1]
+    #     ])
+    #     return np.matmul(proj_mat,sensor_coord_mat)+np.array([
+    #         [self.res_x/2],
+    #         [self.res_y/2],
+    #         [0]
+    #     ])
     def getPixelXYAxis(self,sensor_coord_mat):
         myu=1.12e-6
         fx=self.res_x/(2*np.tan(np.deg2rad(self.FOVx/2)))*myu
