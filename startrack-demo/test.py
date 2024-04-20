@@ -65,6 +65,8 @@ for impath in path.glob('*'):
             final = (solution,) + centr_data[1:]
         else:
             final = solution
+
+        final['Roll']=180-final['Roll']
         print(centr_data)
         print(solution)
         print('Solution: ')
